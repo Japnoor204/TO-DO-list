@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Todo List App</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="todo-app">
+            <div class="app-header">
+                <h2>Todo List <i class="fas fa-list"></i></h2>
+                <button id="theme-toggle" class="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <div class="search-section">
+                <input type="text" id="search-input" placeholder="Search tasks...">
+                <button id="search-button"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="input-section">
+                <div class="task-input-group">
+                    <input type="text" id="task-input" placeholder="Add your task...">
+                    <input type="date" id="due-date-input">
+                    <select id="priority-input">
+                        <option value="low">Low Priority</option>
+                        <option value="medium">Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+                    <input type="text" id="category-input" placeholder="Category (comma-separated)">
+                </div>
+                <button id="add-button">Add Task</button>
+            </div>
+
+            <div class="filters">
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+                <div class="sort-group">
+                    <select id="sort-select">
+                        <option value="date-added">Date Added</option>
+                        <option value="due-date">Due Date</option>
+                        <option value="priority">Priority</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="categories-filter" id="categories-filter">
+                <!-- Categories will be added here dynamically -->
+            </div>
+
+            <ul id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </ul>
+
+            <div class="todo-stats">
+                <span id="tasks-counter">0 tasks left</span>
+                <div class="stats-buttons">
+                    <button id="clear-completed">Clear Completed</button>
+                    <button id="clear-expired">Clear Expired</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
