@@ -1,3 +1,4 @@
+
 // DOM Elements
 const taskInput = document.getElementById('task-input');
 const dueDateInput = document.getElementById('due-date-input');
