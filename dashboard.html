@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TaskMaster Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <i class="fas fa-tasks app-icon"></i>
+        <h2>TaskMaster</h2>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active">
+          <i class="fas fa-home"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" onclick="filterByCategory('personal')">
+          <i class="fas fa-user"></i>
+          <span>Personal</span>
+        </a>
+        <a href="#" class="nav-item" onclick="filterByCategory('work')">
+          <i class="fas fa-briefcase"></i>
+          <span>Work</span>
+        </a>
+        <a href="#" class="nav-item" onclick="filterByCategory('shopping')">
+          <i class="fas fa-shopping-cart"></i>
+          <span>Shopping</span>
+        </a>
+        <a href="#" class="nav-item" onclick="filterByCategory('health')">
+          <i class="fas fa-heart"></i>
+          <span>Health</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-info">
+          <i class="fas fa-user-circle"></i>
+          <span id="userDisplay"></span>
+        </div>
+        <button onclick="logout()" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="dashboard-header">
+        <div class="header-search">
+          <i class="fas fa-search"></i>
+          <input type="text" id="searchInput" placeholder="Search tasks..." onkeyup="searchTasks()">
+        </div>
+        <div class="header-actions">
+          <button class="sort-btn" onclick="toggleSortMenu()">
+            <i class="fas fa-sort"></i>
+            Sort
+          </button>
+          <div class="sort-menu" id="sortMenu">
+            <a href="#" onclick="sortTasks('dueDate')">By Due Date</a>
+            <a href="#" onclick="sortTasks('priority')">By Priority</a>
+            <a href="#" onclick="sortTasks('category')">By Category</a>
+            <a href="#" onclick="sortTasks('status')">By Status</a>
+          </div>
+        </div>
+      </header>
+
+      <div class="dashboard-stats">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class="fas fa-tasks"></i>
+          </div>
+          <div class="stat-info">
+            <span id="totalTasks">0</span>
+            <label>Total Tasks</label>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon completed">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span id="completedTasks">0</span>
+            <label>Completed</label>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pending">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-info">
+            <span id="pendingTasks">0</span>
+            <label>Pending</label>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon urgent">
+            <i class="fas fa-exclamation-circle"></i>
+          </div>
+          <div class="stat-info">
+            <span id="urgentTasks">0</span>
+            <label>Urgent</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-controls">
+        <button class="add-task-btn" onclick="showAddTaskModal()">
+          <i class="fas fa-plus"></i>
+          Add New Task
+        </button>
+        <div class="view-controls">
+          <button class="view-btn active" onclick="switchView('grid')">
+            <i class="fas fa-th-large"></i>
+          </button>
+          <button class="view-btn" onclick="switchView('list')">
+            <i class="fas fa-list"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <button class="filter-button active" onclick="filterTasks('all')">All</button>
+        <button class="filter-button" onclick="filterTasks('active')">Active</button>
+        <button class="filter-button" onclick="filterTasks('completed')">Completed</button>
+        <button class="filter-button" onclick="filterTasks('urgent')">Urgent</button>
+      </div>
+
+      <div id="taskList" class="task-grid">
+        <!-- Tasks will be dynamically added here -->
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Task Modal -->
+  <div id="taskModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add New Task</h3>
+        <button class="close-btn" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="input-group">
+          <label>Task Title</label>
+          <input type="text" id="taskInput" placeholder="Enter task title">
+        </div>
+        <div class="input-group">
+          <label>Description</label>
+          <textarea id="taskDescription" placeholder="Enter task description"></textarea>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label>Due Date</label>
+            <input type="date" id="dueDate">
+          </div>
+          <div class="input-group">
+            <label>Priority</label>
+            <select id="priority">
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label>Category</label>
+            <select id="category">
+              <option value="personal">Personal</option>
+              <option value="work">Work</option>
+              <option value="shopping">Shopping</option>
+              <option value="health">Health</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Status</label>
+            <select id="status">
+              <option value="pending">Pending</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="secondary-btn" onclick="closeModal()">Cancel</button>
+        <button class="primary-btn" onclick="saveTask()">Save Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Template -->
+  <template id="taskTemplate">
+    <div class="task-card">
+      <div class="task-header">
+        <div class="task-category">
+          <i class="fas"></i>
+          <span></span>
+        </div>
+        <div class="task-actions">
+          <button class="edit-btn" title="Edit">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="delete-btn" title="Delete">
+            <i class="fas fa-trash"></i>
+          </button>
+        </div>
+      </div>
+      <div class="task-body">
+        <h3 class="task-title"></h3>
+        <p class="task-description"></p>
+        <div class="task-meta">
+          <span class="due-date">
+            <i class="fas fa-calendar"></i>
+            <span></span>
+          </span>
+          <span class="task-priority">
+            <i class="fas fa-flag"></i>
+            <span></span>
+          </span>
+        </div>
+      </div>
+      <div class="task-footer">
+        <div class="task-status">
+          <span class="status-dot"></span>
+          <span class="status-text"></span>
+        </div>
+        <label class="checkbox">
+          <input type="checkbox" class="task-checkbox">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
